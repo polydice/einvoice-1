@@ -103,8 +103,9 @@ module Einvoice
 
         # Type BA04 I R G BB04 H A
         validates :receiverName, allow_blank: true, length: { maximum: 30 }, if: proc { %w(BA04 I R G BB04 H A).include?(self.type) }
-        validates :receiverAddrZip, allow_blank: true, length: { maximum: 5 }, if: proc { %w(BA04 I R G BB04 H A).include?(self.type) }
+        validates :receiverAddrZip, allow_blank: true, length: { maximum: 6 }, if: proc { %w(BA04 I R G BB04 H A).include?(self.type) }
         validates :receiverAddrRoad, allow_blank: true, length: { maximum: 100 }, if: proc { %w(BA04 I R G BB04 H A).include?(self.type) }
+        validates :receiverEmail, allow_blank: true, length: { maximum: 400 }, if: proc { %w(BA04 I G R BB04 H A).include?(self.type) }
         validates :receiverMobile, allow_blank: true, length: { maximum: 15 }, if: proc { %w(BA04 I R G BB04 H A).include?(self.type) }
 
         # Type BA04 I G
