@@ -1,16 +1,16 @@
-require "spec_helper"
+require 'spec_helper'
 
 RSpec.describe Einvoice::Tradevan::Model::IssueData, type: :model do
   subject { build(:tradevan_issue_data, :I) }
 
-  context "validations" do
+  context 'validations' do
     it { is_expected.to validate_presence_of(:companyUn) }
     it { is_expected.to validate_length_of(:companyUn).is_equal_to(8) }
     it { is_expected.to validate_presence_of(:orgId) }
     it { is_expected.to validate_length_of(:orgId).is_equal_to(5) }
     it { is_expected.to validate_length_of(:orgUn).is_equal_to(8) }
     it { is_expected.to validate_presence_of(:type) }
-    it { is_expected.to validate_length_of(:type).is_equal_to(1) }
+    it { is_expected.to validate_length_of(:type).is_at_most(4) }
     it { is_expected.to validate_presence_of(:saleIdentifier) }
     it { is_expected.to validate_length_of(:saleIdentifier).is_at_most(100) }
     it { is_expected.to validate_presence_of(:transactionNumber) }
@@ -35,7 +35,7 @@ RSpec.describe Einvoice::Tradevan::Model::IssueData, type: :model do
     it { is_expected.to validate_length_of(:memberId).is_at_most(50) }
     # it { is_expected.to validate_presence_of(:itemList) }
 
-    context "on type I" do
+    context 'on type I' do
       it { is_expected.to validate_presence_of(:donate) }
       it { is_expected.to validate_length_of(:donate).is_equal_to(1) }
 
@@ -45,29 +45,27 @@ RSpec.describe Einvoice::Tradevan::Model::IssueData, type: :model do
         it { is_expected.to validate_presence_of(:donationUnit) }
         it { is_expected.to validate_length_of(:donationUnit).is_at_most(10) }
 
-        it "returns true when donation unit is on list" do
-          subject.donationUnit = "9999"
+        it 'returns true when donation unit is on list' do
+          subject.donationUnit = '9999'
           expect(subject.valid?).to be_truthy
         end
 
         it "returns false when donation unit isn't on list" do
-          subject.donationUnit = "5566183"
+          subject.donationUnit = '5566183'
           expect(subject.valid?).to be_falsey
         end
       end
 
-      it { is_expected.to validate_presence_of(:carrierId) }
-      it { is_expected.to validate_length_of(:carrierId).is_at_most(64) }
-      it { is_expected.to validate_presence_of(:carrierIdHidden) }
-      it { is_expected.to validate_length_of(:carrierIdHidden).is_at_most(64) }
+      it { is_expected.to validate_length_of(:carrierId).is_at_most(400) }
+      it { is_expected.to validate_length_of(:carrierIdHidden).is_at_most(400) }
       it { is_expected.to validate_length_of(:receiverName).is_at_most(30) }
       it { is_expected.to validate_length_of(:receiverAddrZip).is_at_most(6) }
       it { is_expected.to validate_length_of(:receiverAddrRoad).is_at_most(100) }
-      it { is_expected.to validate_length_of(:receiverEmail).is_at_most(80) }
+      it { is_expected.to validate_length_of(:receiverEmail).is_at_most(400) }
       it { is_expected.to validate_length_of(:receiverMobile).is_at_most(15) }
     end
 
-    context "on type R" do
+    context 'on type R' do
       subject { build(:tradevan_issue_data, :R) }
 
       it { is_expected.to validate_presence_of(:invoiceNumber) }
@@ -82,18 +80,16 @@ RSpec.describe Einvoice::Tradevan::Model::IssueData, type: :model do
         it { is_expected.to validate_length_of(:donationUnit).is_at_most(10) }
       end
 
-      it { is_expected.to validate_presence_of(:carrierId) }
-      it { is_expected.to validate_length_of(:carrierId).is_at_most(64) }
-      it { is_expected.to validate_presence_of(:carrierIdHidden) }
-      it { is_expected.to validate_length_of(:carrierIdHidden).is_at_most(64) }
+      it { is_expected.to validate_length_of(:carrierId).is_at_most(400) }
+      it { is_expected.to validate_length_of(:carrierIdHidden).is_at_most(400) }
       it { is_expected.to validate_length_of(:receiverName).is_at_most(30) }
       it { is_expected.to validate_length_of(:receiverAddrZip).is_at_most(6) }
       it { is_expected.to validate_length_of(:receiverAddrRoad).is_at_most(100) }
-      it { is_expected.to validate_length_of(:receiverEmail).is_at_most(80) }
+      it { is_expected.to validate_length_of(:receiverEmail).is_at_most(400) }
       it { is_expected.to validate_length_of(:receiverMobile).is_at_most(15) }
     end
 
-    context "on type G" do
+    context 'on type G' do
       subject { build(:tradevan_issue_data, :G) }
 
       it { is_expected.to validate_presence_of(:invoiceNumber) }
@@ -108,27 +104,25 @@ RSpec.describe Einvoice::Tradevan::Model::IssueData, type: :model do
         it { is_expected.to validate_length_of(:donationUnit).is_at_most(10) }
       end
 
-      it { is_expected.to validate_presence_of(:carrierId) }
-      it { is_expected.to validate_length_of(:carrierId).is_at_most(64) }
-      it { is_expected.to validate_presence_of(:carrierIdHidden) }
-      it { is_expected.to validate_length_of(:carrierIdHidden).is_at_most(64) }
+      it { is_expected.to validate_length_of(:carrierId).is_at_most(400) }
+      it { is_expected.to validate_length_of(:carrierIdHidden).is_at_most(400) }
       it { is_expected.to validate_length_of(:receiverName).is_at_most(30) }
       it { is_expected.to validate_length_of(:receiverAddrZip).is_at_most(6) }
       it { is_expected.to validate_length_of(:receiverAddrRoad).is_at_most(100) }
-      it { is_expected.to validate_length_of(:receiverEmail).is_at_most(80) }
+      it { is_expected.to validate_length_of(:receiverEmail).is_at_most(400) }
       it { is_expected.to validate_length_of(:receiverMobile).is_at_most(15) }
       it { is_expected.to validate_length_of(:checkNumber).is_equal_to(4) }
       it { is_expected.to validate_length_of(:invoiceDate).is_equal_to(8) }
       it { is_expected.to validate_length_of(:invoiceTime).is_equal_to(8) }
-      it { is_expected.to validate_length_of(:texclusiveAmount).is_at_most(20) }
-      it { is_expected.to validate_length_of(:oeclusiveAmount).is_at_most(20) }
-      it { is_expected.to validate_length_of(:zexclusiveAmount).is_at_most(20) }
-      it { is_expected.to validate_length_of(:tax).is_at_most(20) }
+      it { is_expected.to validate_length_of(:texclusiveAmount).is_at_most(27) }
+      it { is_expected.to validate_length_of(:oexclusiveAmount).is_at_most(27) }
+      it { is_expected.to validate_length_of(:zexclusiveAmount).is_at_most(27) }
+      it { is_expected.to validate_length_of(:tax).is_at_most(27) }
       it { is_expected.to validate_length_of(:mainRemark).is_at_most(300) }
       it { is_expected.to validate_length_of(:invoiceType).is_equal_to(2) }
     end
 
-    context "on type H" do
+    context 'on type H' do
       subject { build(:tradevan_issue_data, :H) }
 
       it { is_expected.to validate_presence_of(:allowanceIdentifier) }
@@ -142,12 +136,12 @@ RSpec.describe Einvoice::Tradevan::Model::IssueData, type: :model do
       it { is_expected.to validate_presence_of(:allowanceExclusiveAmount) }
       it { is_expected.to validate_length_of(:allowanceExclusiveAmount).is_at_most(20) }
       it { is_expected.to validate_presence_of(:allowanceTax) }
-      it { is_expected.to validate_length_of(:allowanceTax).is_at_most(8) }
+      it { is_expected.to validate_length_of(:allowanceTax).is_at_most(20) }
       it { is_expected.to validate_presence_of(:allowancePaperReturned) }
       it { is_expected.to validate_length_of(:allowancePaperReturned).is_equal_to(1) }
     end
 
-    context "on type A" do
+    context 'on type A' do
       subject { build(:tradevan_issue_data, :A) }
 
       it { is_expected.to validate_presence_of(:allowanceIdentifier) }
@@ -155,12 +149,82 @@ RSpec.describe Einvoice::Tradevan::Model::IssueData, type: :model do
       it { is_expected.to validate_presence_of(:allowanceExclusiveAmount) }
       it { is_expected.to validate_length_of(:allowanceExclusiveAmount).is_at_most(20) }
       it { is_expected.to validate_presence_of(:allowanceTax) }
-      it { is_expected.to validate_length_of(:allowanceTax).is_at_most(8) }
+      it { is_expected.to validate_length_of(:allowanceTax).is_at_most(20) }
       it { is_expected.to validate_presence_of(:allowancePaperReturned) }
       it { is_expected.to validate_length_of(:allowancePaperReturned).is_equal_to(1) }
       it { is_expected.to validate_length_of(:allowaDeclaration).is_equal_to(6) }
       it { is_expected.to validate_presence_of(:invoicePaperReturned) }
       it { is_expected.to validate_length_of(:invoicePaperReturned).is_at_most(1) }
+    end
+
+    context 'v3.0 新增欄位' do
+      subject { build(:tradevan_issue_data, :I) }
+
+      context '零稅率相關欄位' do
+        before do
+          subject.itemList = [build(:tradevan_issue_item, taxType: 'Z')]
+          subject.zeroTaxRateReason = '71'
+          subject.customsClearanceMark = '1'
+        end
+
+        it '當有零稅率商品時，zeroTaxRateReason 長度為 2' do
+          subject.zeroTaxRateReason = '71'
+          expect(subject.valid?).to be_truthy
+          subject.zeroTaxRateReason = '711'
+          expect(subject.valid?).to be_falsey
+        end
+
+        it '當有零稅率商品時，customsClearanceMark 長度為 1' do
+          subject.customsClearanceMark = '1'
+          expect(subject.valid?).to be_truthy
+          subject.customsClearanceMark = '12'
+          expect(subject.valid?).to be_falsey
+        end
+      end
+
+      context 'preDataCode' do
+        subject { build(:tradevan_issue_data, :G) }
+
+        it { is_expected.to validate_length_of(:preDataCode).is_at_most(10) }
+      end
+    end
+
+    context '零稅率商品驗證' do
+      before do
+        subject.itemList = [build(:tradevan_issue_item, taxType: 'Z')]
+        subject.zeroTaxRateReason = '71'
+        subject.customsClearanceMark = '1'
+      end
+
+      it '當有零稅率商品時，zeroTaxRateReason 必填' do
+        subject.zeroTaxRateReason = nil
+        expect(subject).not_to be_valid
+        expect(subject.errors[:zeroTaxRateReason]).to be_present
+      end
+
+      it '當有零稅率商品時，customsClearanceMark 必填' do
+        subject.customsClearanceMark = nil
+        expect(subject).not_to be_valid
+        expect(subject.errors[:customsClearanceMark]).to be_present
+      end
+
+      it 'zeroTaxRateReason 必須是 71-79' do
+        subject.zeroTaxRateReason = '70'
+        expect(subject).not_to be_valid
+        subject.zeroTaxRateReason = '71'
+        expect(subject).to be_valid
+        subject.zeroTaxRateReason = '80'
+        expect(subject).not_to be_valid
+      end
+
+      it 'customsClearanceMark 必須是 1 或 2' do
+        subject.customsClearanceMark = '0'
+        expect(subject).not_to be_valid
+        subject.customsClearanceMark = '1'
+        expect(subject).to be_valid
+        subject.customsClearanceMark = '3'
+        expect(subject).not_to be_valid
+      end
     end
   end
 end

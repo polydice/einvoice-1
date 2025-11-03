@@ -59,7 +59,7 @@ FactoryBot.define do
       invoiceDate { "20160324" }
       invoiceTime { "01:43:30" }
       texclusiveAmount { "100" }
-      oeclusiveAmount { "5" }
+      oexclusiveAmount { "5" }
       zexclusiveAmount { "0" }
       tax { "5" }
       mainRemark { "remark" }
