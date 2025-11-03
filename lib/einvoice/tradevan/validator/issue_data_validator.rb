@@ -1,3 +1,5 @@
+require 'json'
+
 module Einvoice
   module Tradevan
     module Validator
@@ -43,6 +45,14 @@ module Einvoice
 
       class DonationUnitValidator < ActiveModel::EachValidator
         def validate_each(record, attribute, value)
+          return if value.blank?
+
+          # v3.0 支援統一編號格式 (8 碼數字)
+          if value.length == 8 && value.match?(/\A\d{8}\Z/)
+            return
+          end
+
+          # 檢查是否為捐贈碼格式 (3-7 碼)
           donation_unit_list_file = [File.expand_path('../../../', __FILE__), "/donation_unit_list.json"].join
           units = JSON.parse(File.read(donation_unit_list_file))
 
@@ -62,7 +72,7 @@ module Einvoice
             # none
           end
 
-          if %w(A H).include?(record.type)
+          if %w(BB04 H A).include?(record.type)
             if record.itemList.map(&:invoiceNumber).map(&:blank?).reduce(&:|)
               record.errors[:itemList] << options[:message] || :invalid
             elsif record.itemList.map(&:invoiceDate).map(&:blank?).reduce(&:|)

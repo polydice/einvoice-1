@@ -1,34 +1,28 @@
 module Einvoice
   module Tradevan
     module Model
-      class VoidData < Base
+      class VoidAllowanceData < Base
         VALID_OPTIONS_KEYS = [
           :type,
           :companyUn,
-          :saleIdentifier,
-          :invoiceNumber,
-          :invoicePaperReturned,
+          :allowanceNumber,
+          :allowancePaperReturned,
           :voidDate,
           :voidTime,
           :voidReason,
-          :remark,
-          :returnTaxDocumentNumber
+          :remark
         ].freeze
 
         attr_accessor *VALID_OPTIONS_KEYS
 
-        validates :type, presence: true, length: { maximum: 4 }, inclusion: { in: %w(BA05 I C) }
-
-        # Type BA05 I C
+        validates :type, presence: true, length: { maximum: 4 }, inclusion: { in: %w(BB05 A) }
         validates :companyUn, presence: true, length: { is: 8 }
-        validates :saleIdentifier, presence: true, length: { maximum: 100 }
-        validates :invoiceNumber, presence: true, length: { is: 10 }
-        validates :invoicePaperReturned, presence: true, length: { maximum: 1 }, inclusion: { in: %w(Y N) }
+        validates :allowanceNumber, presence: true, length: { is: 16 }
+        validates :allowancePaperReturned, presence: true, length: { is: 1 }, inclusion: { in: %w(Y N) }
         validates :voidDate, allow_blank: true, length: { is: 8 }, format: { with: /\A\d{8}\Z/ }
         validates :voidTime, allow_blank: true, length: { is: 8 }, format: { with: /\A\d{2}\:\d{2}\:\d{2}\Z/ }
         validates :voidReason, allow_blank: true, length: { maximum: 20 }
         validates :remark, allow_blank: true, length: { maximum: 200 }
-        validates :returnTaxDocumentNumber, allow_blank: true, length: { maximum: 60 }
 
         def payload
           serializable_hash(except: [:errors, :validation_context, :itemList])
@@ -37,3 +31,4 @@ module Einvoice
     end
   end
 end
+

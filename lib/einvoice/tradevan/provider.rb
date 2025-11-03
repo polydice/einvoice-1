@@ -7,6 +7,8 @@ require "einvoice/tradevan/model/base"
 require "einvoice/tradevan/model/issue_data"
 require "einvoice/tradevan/model/issue_item"
 require "einvoice/tradevan/model/void_data"
+require "einvoice/tradevan/model/allowance_data"
+require "einvoice/tradevan/model/void_allowance_data"
 
 require "einvoice/tradevan/result"
 
@@ -23,8 +25,8 @@ module Einvoice
               verify: false
             }
           ).post do |request|
-            request.url endpoint_url || endpoint + "/DEFAULTAPI/post/issue"
-            request.params[:v] = encrypted_params(issueData: issue_data.payload)
+            request.url endpoint_url || endpoint + "/DEFAULTAPI/post/issueInv"
+            request.params[:v] = encrypted_params(issueInv: issue_data.payload)
           end.body
 
           Einvoice::Tradevan::Result.new(response)
@@ -43,13 +45,53 @@ module Einvoice
               verify: false
             }
           ).post do |request|
-            request.url endpoint_url || endpoint + "/DEFAULTAPI/post/cancel"
-            request.params[:v] = encrypted_params(voidData: void_data.payload)
+            request.url endpoint_url || endpoint + "/DEFAULTAPI/post/voidInv"
+            request.params[:v] = encrypted_params(voidInv: void_data.payload)
           end.body
 
           Einvoice::Tradevan::Result.new(response)
         else
           Einvoice::Tradevan::Result.new(void_data.errors)
+        end
+      end
+
+      def issue_allowance(payload, options = {})
+        allowance_data = Einvoice::Tradevan::Model::AllowanceData.new
+        allowance_data.from_json(payload.to_json)
+
+        if allowance_data.valid?
+          response = connection(
+            ssl: {
+              verify: false
+            }
+          ).post do |request|
+            request.url endpoint_url || endpoint + "/DEFAULTAPI/post/issueAlwn"
+            request.params[:v] = encrypted_params(issueAlwn: allowance_data.payload)
+          end.body
+
+          Einvoice::Tradevan::Result.new(response)
+        else
+          Einvoice::Tradevan::Result.new(allowance_data.errors)
+        end
+      end
+
+      def void_allowance(payload, options = {})
+        void_allowance_data = Einvoice::Tradevan::Model::VoidAllowanceData.new
+        void_allowance_data.from_json(payload.to_json)
+
+        if void_allowance_data.valid?
+          response = connection(
+            ssl: {
+              verify: false
+            }
+          ).post do |request|
+            request.url endpoint_url || endpoint + "/DEFAULTAPI/post/voidAlwn"
+            request.params[:v] = encrypted_params(voidAlwn: void_allowance_data.payload)
+          end.body
+
+          Einvoice::Tradevan::Result.new(response)
+        else
+          Einvoice::Tradevan::Result.new(void_allowance_data.errors)
         end
       end
 
