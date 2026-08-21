@@ -129,7 +129,7 @@ module Einvoice
         validates :preDataCode, allow_blank: true, length: { maximum: 10 }, if: proc { %w(BA04 G).include?(self.type) }
 
         def payload
-          serializable_hash(except: [:errors, :validation_context], include: [:itemList])
+          serializable_hash(except: EXCLUDED_ATTRIBUTES, include: [:itemList])
         end
 
         private

@@ -57,7 +57,7 @@ module Einvoice
         validates :allowaDeclaration, allow_blank: true, length: { is: 6 }, format: { with: /\A\d{6}\Z/ }, if: proc { self.type == 'A' }
 
         def payload
-          serializable_hash(except: [:errors, :validation_context], include: [:itemList])
+          serializable_hash(except: EXCLUDED_ATTRIBUTES, include: [:itemList])
         end
       end
     end

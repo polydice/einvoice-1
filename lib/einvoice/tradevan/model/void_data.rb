@@ -31,7 +31,7 @@ module Einvoice
         validates :returnTaxDocumentNumber, allow_blank: true, length: { maximum: 60 }
 
         def payload
-          serializable_hash(except: [:errors, :validation_context, :itemList])
+          serializable_hash(except: EXCLUDED_ATTRIBUTES + [:itemList])
         end
       end
     end
